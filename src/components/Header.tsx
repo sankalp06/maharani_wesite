@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Phone, Search, ShoppingBag, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { MobileMenu } from "@/components/MobileMenu";
 import { useCartStore } from "@/store/cart";
 
 type NavCategory = {
@@ -173,58 +174,7 @@ export function Header({
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 z-50"
-              onClick={() => setOpen(false)}
-            />
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "tween", duration: 0.25 }}
-              className="fixed top-0 left-0 h-full w-[85%] max-w-sm bg-cream z-50 overflow-y-auto"
-            >
-              <div className="flex items-center justify-between p-4 border-b border-gold/20">
-                <Logo />
-                <button onClick={() => setOpen(false)} className="p-2 text-ink">
-                  <X size={22} />
-                </button>
-              </div>
-              <div className="p-4 space-y-5">
-                {categories.map((cat) => (
-                  <div key={cat.id}>
-                    <Link
-                      href={`/c/${cat.slug}`}
-                      onClick={() => setOpen(false)}
-                      className="font-serif text-lg text-maroon"
-                    >
-                      {cat.name}
-                    </Link>
-                    <div className="mt-2 flex flex-col gap-1.5 pl-3">
-                      {cat.subCategories.map((sub) => (
-                        <Link
-                          key={sub.id}
-                          href={`/c/${cat.slug}/${sub.slug}`}
-                          onClick={() => setOpen(false)}
-                          className="text-sm text-ink/70"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <MobileMenu open={open} onClose={() => setOpen(false)} categories={categories} />
     </header>
   );
 }
