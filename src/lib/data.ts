@@ -120,3 +120,26 @@ export async function getLatestProducts(limit = 8) {
     return [];
   }
 }
+
+export async function searchProducts(query: string) {
+  if (!query.trim()) return [];
+  try {
+    return await prisma.product.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { description: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      include: {
+        images: { orderBy: { order: "asc" } },
+        subCategory: { include: { category: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 40,
+    });
+  } catch {
+    return [];
+  }
+}

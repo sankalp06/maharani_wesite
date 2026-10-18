@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Toaster } from "react-hot-toast";
 import { LayoutGrid, Package, ClipboardList, Settings } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
@@ -52,7 +51,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
         <main className="p-4 sm:p-8">{children}</main>
       </div>
-      <Toaster position="top-center" />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus, Palette, ShoppingBag } from "lucide-react";
 import toast from "react-hot-toast";
 import { ImageUploader } from "@/components/ImageUploader";
@@ -27,10 +28,23 @@ export function AddToCartPanel({
   const [wantsCustom, setWantsCustom] = useState(false);
   const [designImage, setDesignImage] = useState<string[]>([]);
   const [designDescription, setDesignDescription] = useState("");
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const ctaRef = useRef<HTMLDivElement>(null);
   const addItem = useCartStore((s) => s.addItem);
   const router = useRouter();
 
   const outOfStock = product.stock <= 0;
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   function handleAddToCart() {
     if (wantsCustom && designImage.length === 0) {
@@ -120,7 +134,7 @@ export function AddToCartPanel({
         </div>
       )}
 
-      <div className="flex gap-3">
+      <div ref={ctaRef} className="flex gap-3">
         <button
           onClick={handleAddToCart}
           disabled={outOfStock}
@@ -136,6 +150,34 @@ export function AddToCartPanel({
           Buy Now
         </button>
       </div>
+
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gold/30 px-4 py-3 flex items-center gap-3 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]"
+          >
+            <span className="font-serif text-lg text-maroon shrink-0">{formatPrice(product.price)}</span>
+            <button
+              onClick={handleAddToCart}
+              disabled={outOfStock}
+              className="flex-1 border border-maroon text-maroon py-2.5 rounded-full text-sm font-medium disabled:opacity-40"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              disabled={outOfStock}
+              className="flex-1 bg-maroon text-cream py-2.5 rounded-full text-sm font-medium disabled:opacity-40"
+            >
+              Buy Now
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

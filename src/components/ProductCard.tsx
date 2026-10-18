@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -24,6 +25,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
     product.compareAtPrice && product.compareAtPrice > product.price
       ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
       : null;
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <motion.div
@@ -39,7 +41,10 @@ export function ProductCard({ product, index = 0 }: { product: ProductCardData; 
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            onLoad={() => setLoaded(true)}
+            className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+              loaded ? "opacity-100 blur-0" : "opacity-0 blur-sm"
+            }`}
           />
           {discount && (
             <span className="absolute top-3 left-3 bg-maroon text-cream text-xs font-semibold px-2 py-1 rounded-full">
