@@ -1,6 +1,7 @@
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
-export async function getNavCategories() {
+export const getNavCategories = cache(async () => {
   try {
     return await prisma.category.findMany({
       where: { isActive: true },
@@ -19,7 +20,7 @@ export async function getNavCategories() {
   } catch {
     return [];
   }
-}
+});
 
 export async function getSiteSettings() {
   try {

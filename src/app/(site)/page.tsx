@@ -5,7 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import { ProductCard } from "@/components/ProductCard";
 import { getAllCategoriesFull, getLatestProducts, getTrendingProducts } from "@/lib/data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function HomePage() {
   const [trending, latest, categories] = await Promise.all([

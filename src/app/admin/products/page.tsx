@@ -5,6 +5,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { Plus, Pencil, Trash2, ChevronRight, Palette, TrendingUp } from "lucide-react";
 import { Modal } from "@/components/admin/Modal";
+import { CategoryTree } from "@/components/admin/CategoryTree";
 import { ImageUploader } from "@/components/ImageUploader";
 import { formatPrice } from "@/lib/utils";
 
@@ -126,8 +127,41 @@ export default function AdminProductsPage() {
     if (selectedSubCategory) loadProducts(selectedSubCategory.id);
   }
 
+  function selectCategoryById(categoryId: string) {
+    const cat = categories.find((c) => c.id === categoryId);
+    if (cat) setSelectedCategory(cat);
+    setSelectedSubCategory(null);
+  }
+
+  function selectSubCategoryById(categoryId: string, subCategoryId: string) {
+    const cat = categories.find((c) => c.id === categoryId);
+    if (!cat) return;
+    const sub = cat.subCategories.find((s) => s.id === subCategoryId);
+    if (!sub) return;
+    setSelectedCategory(cat);
+    setSelectedSubCategory(sub);
+  }
+
+  function addSubCategoryTo(categoryId: string) {
+    const cat = categories.find((c) => c.id === categoryId);
+    if (cat) setSelectedCategory(cat);
+    setSelectedSubCategory(null);
+    setSubCategoryModal({ open: true, editing: null });
+  }
+
   return (
-    <div>
+    <div className="flex flex-col lg:flex-row gap-6">
+      <CategoryTree
+        categories={categories}
+        selectedCategoryId={selectedCategory?.id}
+        selectedSubCategoryId={selectedSubCategory?.id}
+        onSelectCategory={selectCategoryById}
+        onSelectSubCategory={selectSubCategoryById}
+        onAddCategory={() => setCategoryModal({ open: true, editing: null })}
+        onAddSubCategory={addSubCategoryTo}
+      />
+
+      <div className="flex-1 min-w-0">
       <Breadcrumb
         category={selectedCategory}
         subCategory={selectedSubCategory}
@@ -268,6 +302,7 @@ export default function AdminProductsPage() {
           )}
         </Section>
       )}
+      </div>
 
       <CategoryModal
         state={categoryModal}
