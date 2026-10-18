@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fdf8f2;
+  --foreground: #2b1810;
+
+  --maharani-maroon: #7a1f3d;
+  --maharani-maroon-dark: #5c1530;
+  --maharani-gold: #c9a24b;
+  --maharani-gold-light: #e4c77e;
+  --maharani-cream: #fdf8f2;
+  --maharani-blush: #f3dde0;
+  --maharani-ink: #2b1810;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-maroon: var(--maharani-maroon);
+  --color-maroon-dark: var(--maharani-maroon-dark);
+  --color-gold: var(--maharani-gold);
+  --color-gold-light: var(--maharani-gold-light);
+  --color-cream: var(--maharani-cream);
+  --color-blush: var(--maharani-blush);
+  --color-ink: var(--maharani-ink);
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.font-serif {
+  font-family: var(--font-playfair), "Georgia", serif;
+}
+
+.font-sans {
+  font-family: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+}
+
+.tracking-wide-xl {
+  letter-spacing: 0.25em;
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--maharani-gold), transparent);
+}
+
+.shimmer-text {
+  background: linear-gradient(100deg, var(--maharani-maroon) 30%, var(--maharani-gold) 50%, var(--maharani-maroon) 70%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--maharani-gold) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--maharani-gold);
+  border-radius: 8px;
+}

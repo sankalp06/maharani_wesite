@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Category {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  description     String?
+  image           String?
+  order           Int           @default(0)
+  isActive        Boolean       @default(true)
+  hasCustomDesign Boolean       @default(false)
+  subCategories   SubCategory[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model SubCategory {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String
+  image       String?
+  order      Int       @default(0)
+  isActive   Boolean   @default(true)
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products   Product[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([categoryId, slug])
+}
+
+model Product {
+  id             String         @id @default(cuid())
+  name           String
+  slug           String
+  description    String
+  price          Float
+  compareAtPrice Float?
+  stock          Int            @default(0)
+  isTrending     Boolean        @default(false)
+  isActive       Boolean        @default(true)
+  subCategoryId  String
+  subCategory    SubCategory    @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
+  images         ProductImage[]
+  orderItems     OrderItem[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@unique([subCategoryId, slug])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  order     Int      @default(0)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  orderNumber  String      @unique
+  customerName String
+  phone        String
+  email        String?
+  address      String
+  city         String?
+  state        String?
+  pincode      String?
+  notes        String?
+  status       OrderStatus @default(PLACED)
+  totalAmount  Float
+  items        OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id                      String   @id @default(cuid())
+  orderId                 String
+  order                   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId               String?
+  product                 Product? @relation(fields: [productId], references: [id])
+  productName             String
+  unitPrice               Float
+  quantity                Int
+  lineTotal               Float
+  customDesignImage       String?
+  customDesignDescription String?
+}
+
+model SiteSettings {
+  id        String   @id @default("singleton")
+  phone     String?
+  email     String?
+  address   String?
+  instagram String?
+  facebook  String?
+  updatedAt DateTime @updatedAt
+}

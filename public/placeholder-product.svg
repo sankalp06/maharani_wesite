@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 533" width="400" height="533">
+  <rect width="400" height="533" fill="#F3DDE0"/>
+  <g opacity="0.5">
+    <path d="M140 220 L170 170 L200 220 L230 150 L260 220" fill="none" stroke="#C9A24B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="170" cy="170" r="5" fill="#C9A24B"/>
+    <circle cx="230" cy="150" r="6" fill="#C9A24B"/>
+  </g>
+  <text x="200" y="320" font-family="Georgia, serif" font-size="20" fill="#7A1F3D" text-anchor="middle" opacity="0.6">Maharani Boutique</text>
+</svg>
