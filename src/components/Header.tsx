@@ -51,44 +51,48 @@ export function Header({
           <Logo />
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8 mx-auto">
-          {categories.map((cat) => (
-            <div
-              key={cat.id}
-              className="relative py-8"
-              onMouseEnter={() => setActiveCat(cat.id)}
-              onMouseLeave={() => setActiveCat(null)}
-            >
-              <Link
-                href={`/c/${cat.slug}`}
-                className="text-sm font-sans font-medium uppercase tracking-wide text-ink hover:text-maroon transition-colors"
+        <div className="hidden lg:flex flex-1 min-w-0 justify-center relative">
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-cream to-transparent z-10" />
+          <nav className="flex items-center gap-8 overflow-x-auto scrollbar-hide max-w-full px-2">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="relative py-8 shrink-0"
+                onMouseEnter={() => setActiveCat(cat.id)}
+                onMouseLeave={() => setActiveCat(null)}
               >
-                {cat.name}
-              </Link>
-              <AnimatePresence>
-                {activeCat === cat.id && cat.subCategories.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute left-1/2 -translate-x-1/2 top-full bg-white shadow-xl border border-gold/20 rounded-lg py-3 min-w-[200px]"
-                  >
-                    {cat.subCategories.map((sub) => (
-                      <Link
-                        key={sub.id}
-                        href={`/c/${cat.slug}/${sub.slug}`}
-                        className="block px-5 py-2 text-sm text-ink/80 hover:text-maroon hover:bg-blush/40 transition-colors"
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </nav>
+                <Link
+                  href={`/c/${cat.slug}`}
+                  className="text-sm font-sans font-medium uppercase tracking-wide text-ink hover:text-maroon transition-colors whitespace-nowrap"
+                >
+                  {cat.name}
+                </Link>
+                <AnimatePresence>
+                  {activeCat === cat.id && cat.subCategories.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-full bg-white shadow-xl border border-gold/20 rounded-lg py-3 min-w-[200px] z-20"
+                    >
+                      {cat.subCategories.map((sub) => (
+                        <Link
+                          key={sub.id}
+                          href={`/c/${cat.slug}/${sub.slug}`}
+                          className="block px-5 py-2 text-sm text-ink/80 hover:text-maroon hover:bg-blush/40 transition-colors whitespace-nowrap"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </nav>
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-cream to-transparent z-10" />
+        </div>
 
         <Link href="/cart" className="relative p-2 text-ink hover:text-maroon transition-colors">
           <ShoppingBag size={22} />

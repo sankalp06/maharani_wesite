@@ -44,6 +44,15 @@ body {
   letter-spacing: 0.25em;
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .gold-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--maharani-gold), transparent);
